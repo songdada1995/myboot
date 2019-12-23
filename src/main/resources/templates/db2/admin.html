@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="/static/public/js/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery/jquery.min.js"></script>
+<title>DB2</title>
+</head>
+<body>
+<div id="app">
+  <input type="button" @click="sayHai()" value="sayHai">
+</div>
+
+<div id="app-2">
+  <span v-bind:title="message">
+    	后台
+  </span>
+</div>
+
+<div>
+	<table border="1">
+	  <tr>
+	    <th>username</th>
+	    <th>password</th>
+	  </tr>
+	  <tr>
+	    <td>January</td>
+	    <td>$100</td>
+	  </tr>
+	</table>
+</div>
+​
+<div>
+  <input type="button" id="change" value="change">
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+	  userAccount: 'admin',
+	  userPwd: 'Aa123456'
+  },methods:{
+  	sayHai:function(){
+        //发送get请求
+        this.$http.get('/login').then(function(res){
+            //document.write(res.body);    
+            console.log(res);
+        },function(){
+            console.log('请求失败处理');
+        });
+    }
+}
+})
+
+var app2 = new Vue({
+	  el: '#app-2',
+	  data: {
+	    message: 'Vue小demo： ' + new Date().toLocaleString()
+	  }
+	})
+
+
+
+	$("#change").click(function() {
+		
+		$.ajax({
+			url : "/showList",
+			type : "POST",
+            data : {
+			    "userName" : "tony"
+            },
+			success : function(result) {
+				console.log(result);
+			},
+			error : function(returndata) {
+				alert('服务器异常，请稍后再试！');
+			}
+		});
+	});
+
+</script>
+</body>
+</html>

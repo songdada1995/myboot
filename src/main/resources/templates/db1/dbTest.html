@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="/static/js/vue/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery/jquery.min.js"></script>
+<title>DB测试</title>
+</head>
+<body>
+	<div style="margin-top: 10px;text-align: center">
+		<button id="myboot-db1" style="margin-right: 10px">点击查询数据源myboot-db1</button>
+		<input type="text" id="db-data" style="margin-left: 20px" readonly="readonly"/>
+	</div>
+	
+	<div style="margin-top: 10px;text-align: center">
+		<button id="myboot-db2"  style="margin-right: 10px">点击查询数据源myboot-db2</button>
+		<input type="text" id="db-data2" style="margin-left: 20px" readonly="readonly"/>
+	</div>
+
+	<table style="margin-top: 20px" align="center" border="1px" cellspacing="0" width="50%">
+		<tbody id="guest_comment_id">
+			<tr>
+				<th>IP</th>
+				<th>评论</th>
+				<th>时间</th>
+			</tr>
+		</tbody>
+	</table>
+	
+	​
+<script>
+	$(function(){
+		$.ajax({
+			url : "/guest_comment/search",
+			cache : false,
+			type : 'GET',
+			async : true,
+			dataType : "json",
+			data : {},
+			success : function(result) {
+				console.log(result);
+				if(result.length > 0){
+					var html = "";
+					for (var i = 0; i < result.length; i ++){
+						html += "<tr><td>" + result[i].guestIp + "</td><td>" + result[i].comment + "</td><td>" + result[i].createTime + "</td></tr>";
+					}
+					$('#guest_comment_id tr:last-child').after(html);
+				}
+			},
+			error : function(returndata) {
+				alert('服务器异常，请稍后再试！');
+			}
+		});
+	});
+
+	$("#myboot-db1").click(function() {
+		$.ajax({
+			url : "/db1/getUserName",
+			cache : false,
+			type : 'POST',
+			async : true,
+			dataType : "json",
+			data : {id : 1},
+			success : function(result) {
+				console.log(result);
+				$("#db-data").val(result);
+			},
+			error : function(returndata) {
+				alert('服务器异常，请稍后再试！');
+			}
+		});
+	});
+	
+	$("#myboot-db2").click(function() {
+		$.ajax({
+			url : "/db2/getUserName",
+			cache : false,
+			type : 'POST',
+			async : true,
+			dataType : "json",
+			data : {id : 1},
+			success : function(result) {
+				console.log(result);
+				$("#db-data2").val(result);
+			},
+			error : function(returndata) {
+				alert('服务器异常，请稍后再试！');
+			}
+		});
+	});
+</script>
+</body>
+</html>
